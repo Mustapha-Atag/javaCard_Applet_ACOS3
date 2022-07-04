@@ -33,7 +33,7 @@ public class javaCard_Applet_ACOS3 extends Applet {
     private byte FF02[] = {(byte) 0x00}; // {N_OF_FILE}
     private byte FF03[] = {(byte) 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00}; // {IC_CODE, PIN_CODE}
     private byte FF04[] = new byte[MAX_N_OF_FILE*6]; // 64 is max number of files we can create
-    private Object UserFile[] = new Object[255];
+    private Object UserFile[];
     
     final private byte FF02_RECORD_LEN = 1;
     final private byte FF03_RECORD_LEN = 4;
@@ -155,8 +155,10 @@ public class javaCard_Applet_ACOS3 extends Applet {
             if (buffer[ISO7816.OFFSET_P1] >= FF02_NUMBER_OF_RECORDS) ISOException.throwIt(ISO7816.SW_RECORD_NOT_FOUND);
             if (buffer[ISO7816.OFFSET_LC] != FF02_RECORD_LEN) ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
             
-            FF02[0] = buffer[ISO7816.OFFSET_CDATA]; 
-            FF04_NUMBER_OF_RECORDS = buffer[ISO7816.OFFSET_CDATA]; // N_OF_FILE
+            byte N_OF_FILE = buffer[ISO7816.OFFSET_CDATA];
+            FF02[0] = N_OF_FILE; 
+            FF04_NUMBER_OF_RECORDS = N_OF_FILE; // N_OF_FILE
+            UserFile = new Object[N_OF_FILE];
             
         } else if (selectedFile == (short) 0xFF03) {
             if (buffer[ISO7816.OFFSET_P1] >= FF03_NUMBER_OF_RECORDS) ISOException.throwIt(ISO7816.SW_RECORD_NOT_FOUND);
